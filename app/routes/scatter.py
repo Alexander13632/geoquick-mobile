@@ -57,3 +57,5 @@ async def scatter_post(request: Request, x: str = Form(...), y: str = Form(...))
         "y": y,
         "plot_html": plot_html
     })
+
+# This code defines a FastAPI router for handling scatter plot requests.
