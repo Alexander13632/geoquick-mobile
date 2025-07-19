@@ -36,12 +36,48 @@
         </div>
         
         <button type="submit" class="w-full md:w-auto md:ml-4 px-6 py-3 md:px-4 md:py-2 bg-blue-700 text-white rounded-xl font-bold hover:bg-blue-800 transition text-lg md:text-base">
-            📊 Построить
+            📊 Plot!
         </button>
     </form>
     
+    <!-- Обновленный контейнер для графика -->
     <div class="w-full max-w-6xl flex justify-center bg-gray-900 p-4 rounded-xl shadow">
-        {{ plot_html | safe }}
+        <div class="plot-container w-full">
+            {{ plot_html | safe }}
+        </div>
     </div>
 </div>
+
+<!-- CSS стили для мобильной оптимизации графика -->
+<style>
+.plot-container {
+    width: 100%;
+    overflow-x: auto; /* Если график все равно широкий */
+}
+
+.plot-container .plotly-graph-div {
+    width: 100% !important;
+    height: 400px !important;
+}
+
+/* Скрываем Plotly панель инструментов если появится */
+.modebar {
+    display: none !important;
+}
+
+/* Убираем возможность выделения текста в графике */
+.plot-container .plotly-graph-div .plotly {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Мобильная оптимизация */
+@media (max-width: 768px) {
+    .plot-container .plotly-graph-div {
+        height: 350px !important;
+    }
+}
+</style>
 {% endblock %}
