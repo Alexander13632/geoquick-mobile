@@ -16,27 +16,50 @@ def create_mobile_plot(df, x, y, color=None):
     
     # Мобильная оптимизация
     fig.update_layout(
-        height=400,  # Фиксированная высота для мобильных
-        margin=dict(l=20, r=20, t=40, b=20),
-        font=dict(size=14),  # Крупнее шрифт
-        showlegend=True if color else False,  # Показываем легенду только если есть группировка
+        height=400,  # Фиксированная высота
+        margin=dict(l=20, r=20, t=40, b=40),
+        font=dict(size=12),
+        showlegend=True if color else False,
         legend=dict(
-            orientation="h",  # Горизонтальная легенда для мобильных
+            orientation="h",  # Горизонтальная легенда
             yanchor="bottom",
             y=1.02,
             xanchor="right",
             x=1
-        ) if color else {}
+        ) if color else {},
+        # ВАЖНО: автоматическое масштабирование
+        autosize=True,
+        # Убираем возможность выделения области
+        dragmode=False,
     )
     
-    return fig.to_html(
-        full_html=False, 
-        config={
-            "displayModeBar": False,
-            "responsive": True,  # Важно!
-            "doubleClick": "reset+autosize"
-        }
+    # Настройки осей для мобильных
+    fig.update_xaxes(
+        fixedrange=True,  # Запрещаем зум по X
+        automargin=True
     )
+    fig.update_yaxes(
+        fixedrange=True,  # Запрещаем зум по Y  
+        automargin=True
+    )
+    
+    # Мобильная конфигурация
+    config = {
+        "displayModeBar": False,  # Убираем панель инструментов
+        "responsive": True,       # Адаптивный размер
+        "doubleClick": False,     # Отключаем двойной клик
+        "scrollZoom": False,      # Отключаем зум скроллом
+        "showTips": False,        # Убираем подсказки
+        "staticPlot": False,      # Оставляем интерактивность для hover
+        "displaylogo": False,     # Убираем логотип Plotly
+        # Отключаем все взаимодействия кроме hover
+        "modeBarButtonsToRemove": [
+            'pan2d', 'select2d', 'lasso2d', 'zoomIn2d', 'zoomOut2d',
+            'autoScale2d', 'resetScale2d', 'zoom2d'
+        ]
+    }
+    
+    return fig.to_html(full_html=False, config=config)
 
 @router.get("/scatter")
 async def scatter_get(request: Request):
