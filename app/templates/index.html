@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Главная - GeoQuick{% endblock %}
+{% block content %}
+<div class="flex flex-col gap-4">
+  <a href="/upload" class="flex flex-col items-center justify-center bg-gray-600 text-white rounded-xl p-6 shadow-lg hover:bg-gray-800 transition text-center">
+    <!-- иконка -->
+    Download Data
+  </a>  
+  <a href="/scatter" class="flex flex-col items-center justify-center bg-blue-600 text-white rounded-xl p-6 shadow-lg hover:bg-blue-800 transition text-center">
+    <!-- иконка -->
+    Scatter Plot
+  </a>
+  <a href="/box" class="flex flex-col items-center justify-center bg-green-600 text-white rounded-xl p-6 shadow-lg hover:bg-green-800 transition text-center">
+    <!-- иконка -->
+    Box Plot
+  </a>
+  <a href="/tas" class="flex flex-col items-center justify-center bg-yellow-500 text-white rounded-xl p-6 shadow-lg hover:bg-yellow-700 transition text-center">
+    <!-- иконка -->
+    TAS диаграмма
+  </a>
+</div>
+
+{% endblock %}

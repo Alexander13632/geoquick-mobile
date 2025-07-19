@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}GeoQuick Mobile{% endblock %}</title>
+    <!-- Подключаем Tailwind через CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="/static/favicon.ico">
+</head>
+<body class="bg-gradient-to-b from-blue-200 to-white min-h-screen flex flex-col">
+    <header class="bg-blue-700 text-white p-4 flex items-center justify-between shadow">
+        <a href="/" class="font-bold text-xl">GeoQuick</a>
+        <nav>
+            <a href="/" class="mr-4 hover:underline">Main</a>
+            <a href="/about" class="hover:underline">About</a>
+        </nav>
+    </header>
+    <main class="flex-1 container mx-auto px-4 py-6">
+        {% block content %}{% endblock %}
+    </main>
+    <footer class="text-center p-4 bg-blue-100 text-gray-500">
+        &copy; 2025 GeoQuick. All rights reserved.
+    </footer>
+</body>
+</html>

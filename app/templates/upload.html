@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Загрузка данных{% endblock %}
+{% block content %}
+<div class="max-w-md mx-auto bg-white p-6 rounded-xl shadow">
+    <h2 class="text-xl font-bold mb-4 text-blue-700 text-center">Загрузить данные</h2>
+
+    <!-- Вариант 1: Загрузка локального файла -->
+    <form action="/upload_local" method="post" enctype="multipart/form-data" class="mb-6">
+        <label class="block mb-2 font-semibold">Загрузить CSV/Excel с устройства:</label>
+        <input type="file" name="datafile" accept=".csv,.xlsx" class="block w-full mb-4">
+        <button type="submit" class="w-full bg-blue-700 text-white rounded-xl py-2 font-bold hover:bg-blue-800 transition">Загрузить файл</button>
+    </form>
+
+    <div class="flex items-center my-6">
+        <div class="flex-grow border-t border-gray-300"></div>
+        <span class="mx-2 text-gray-400">или</span>
+        <div class="flex-grow border-t border-gray-300"></div>
+    </div>
+
+    <!-- Вариант 2: Загрузка из Google Sheets -->
+    <form action="/upload_gsheet" method="post">
+        <label class="block mb-2 font-semibold">Вставьте ссылку на Google таблицу (доступ по ссылке):</label>
+        <input type="url" name="gsheet_url" placeholder="https://docs.google.com/spreadsheets/..." class="block w-full mb-4 border rounded-xl p-2">
+        <button type="submit" class="w-full bg-green-600 text-white rounded-xl py-2 font-bold hover:bg-green-700 transition">Загрузить из Google Sheets</button>
+    </form>
+</div>
+{% endblock %}
