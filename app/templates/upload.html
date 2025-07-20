@@ -110,6 +110,43 @@
             🔍 Extract Data from Photo
           </button>
 
+        <!-- Добавьте этот блок в ваш upload.html после блока с кнопкой Extract -->
+
+        <!-- Добавьте после кнопки extract-btn -->
+        <div id="processing-info" class="mt-4 p-3 bg-gray-100 rounded-lg text-sm hidden">
+            <div class="flex items-center">
+                <svg class="animate-spin h-4 w-4 mr-2 text-purple-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span id="processing-info-text">Initializing OCR...</span>
+            </div>
+        </div>
+
+        <!-- Обновите блок processing-status чтобы показывать больше деталей -->
+        <div id="processing-status" class="hidden text-center py-6">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+            <p class="text-lg text-gray-700" id="status-text">Processing image...</p>
+            <div class="max-w-sm mx-auto mt-4">
+                <div class="bg-gray-200 rounded-full h-2">
+                    <div id="progress-bar" class="bg-purple-600 h-2 rounded-full transition-all" style="width: 0%"></div>
+                </div>
+            </div>
+            <p class="text-xs text-gray-500 mt-2">Using enhanced geochemical recognition</p>
+        </div>
+
+        <!-- Скрипт для показа информации о процессе -->
+        <script>
+        // Обновите обработчик кнопки Extract
+        document.getElementById('extract-btn')?.addEventListener('click', function() {
+            const infoBlock = document.getElementById('processing-info');
+            if (infoBlock) {
+                infoBlock.classList.remove('hidden');
+                document.getElementById('processing-info-text').textContent = 'Using client OCR with server validation...';
+            }
+        });
+        </script>
+
           <!-- Processing Status -->
           <div id="processing-status" class="hidden text-center py-6">
             <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>

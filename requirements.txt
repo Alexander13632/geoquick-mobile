@@ -6,3 +6,7 @@ aiofiles
 pandas
 plotly
 itsdangerous
+img2table
+opencv-python-headless
+Pillow
+pytesseract

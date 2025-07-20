@@ -4,6 +4,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
 from app.routes import upload, scatter
+from app.routes import upload, scatter, img2table_extract
+
 
 app = FastAPI()   # <-- Только один раз!
 
@@ -23,3 +25,4 @@ async def about(request: Request):
 app.include_router(upload.router)
 app.include_router(scatter.router)
 
+app.include_router(img2table_extract.router)
