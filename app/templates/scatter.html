@@ -1,58 +1,139 @@
 {% extends "base.html" %}
 {% block title %}Scatter Plot{% endblock %}
 {% block content %}
-<div class="min-h-screen flex flex-col items-center justify-start bg-gray-900 py-8">
-    <h2 class="text-2xl font-bold mb-4 text-gray-100 text-center">Scatter Plot</h2>
+<div class="min-h-screen flex flex-col items-center justify-start bg-gray-100 py-8">
+    <h2 class="text-2xl font-bold mb-4 text-gray-800 text-center">Scatter Plot</h2>
     
-    <!-- Адаптивная форма -->
-    <form method="post" class="flex flex-col md:flex-row items-center gap-4 bg-gray-800 p-4 rounded-xl shadow mb-6 w-full max-w-4xl">
-        <div class="w-full md:w-auto">
-            <label class="block md:inline text-gray-300 text-sm mb-2 md:mb-0">X axis</label>
-            <select name="x" class="w-full md:w-auto md:ml-2 rounded p-3 md:p-1 bg-gray-700 text-gray-100 border-none focus:ring-2 focus:ring-blue-400 text-lg md:text-base">
-                {% for col in columns %}
-                  <option value="{{ col }}" {% if col == x %}selected{% endif %}>{{ col }}</option>
-                {% endfor %}
-            </select>
+    <!-- Адаптивная форма с белым дизайном -->
+    <form method="post" class="flex flex-col gap-6 bg-white p-6 rounded-xl shadow-lg mb-6 w-full max-w-6xl border border-gray-200">
+        <!-- Основные селекторы -->
+        <div class="flex flex-col md:flex-row items-center gap-4">
+            <div class="w-full md:w-auto">
+                <label class="block md:inline text-gray-700 text-sm font-medium mb-2 md:mb-0">X axis</label>
+                <select name="x" class="w-full md:w-auto md:ml-2 rounded-lg p-3 md:p-2 bg-gray-50 text-gray-800 border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 text-lg md:text-base">
+                    {% for col in columns %}
+                    <option value="{{ col }}" {% if col == x %}selected{% endif %}>{{ col }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="w-full md:w-auto">
+                <label class="block md:inline text-gray-700 text-sm font-medium mb-2 md:mb-0">Y axis</label>
+                <select name="y" class="w-full md:w-auto md:ml-2 rounded-lg p-3 md:p-2 bg-gray-50 text-gray-800 border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 text-lg md:text-base">
+                    {% for col in columns %}
+                    <option value="{{ col }}" {% if col == y %}selected{% endif %}>{{ col }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="w-full md:w-auto">
+                <label class="block md:inline text-gray-700 text-sm font-medium mb-2 md:mb-0">Group by</label>
+                <select name="color" class="w-full md:w-auto md:ml-2 rounded-lg p-3 md:p-2 bg-gray-50 text-gray-800 border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 text-lg md:text-base">
+                    <option value="">No grouping</option>
+                    {% for col in columns %}
+                    <option value="{{ col }}" {% if col == color %}selected{% endif %}>{{ col }}</option>
+                    {% endfor %}
+                </select>
+            </div>
         </div>
         
-        <div class="w-full md:w-auto">
-            <label class="block md:inline text-gray-300 text-sm mb-2 md:mb-0">Y axis</label>
-            <select name="y" class="w-full md:w-auto md:ml-2 rounded p-3 md:p-1 bg-gray-700 text-gray-100 border-none focus:ring-2 focus:ring-blue-400 text-lg md:text-base">
-                {% for col in columns %}
-                  <option value="{{ col }}" {% if col == y %}selected{% endif %}>{{ col }}</option>
-                {% endfor %}
-            </select>
+        <!-- Логарифмические чекбоксы -->
+        <div class="flex flex-col md:flex-row items-start gap-4 pt-4 border-t border-gray-200">
+            <div class="flex flex-wrap items-center gap-6">
+                <label class="flex items-center cursor-pointer">
+                    <input type="checkbox" name="log_x" value="true" {% if log_x %}checked{% endif %} class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 mr-2">
+                    <span class="text-gray-700 font-medium">Log X axis</span>
+                </label>
+                
+                <label class="flex items-center cursor-pointer">
+                    <input type="checkbox" name="log_y" value="true" {% if log_y %}checked{% endif %} class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 mr-2">
+                    <span class="text-gray-700 font-medium">Log Y axis</span>
+                </label>
+            </div>
         </div>
         
-        <!-- Новый селектор для группировки -->
-        <div class="w-full md:w-auto">
-            <label class="block md:inline text-gray-300 text-sm mb-2 md:mb-0">Group by</label>
-            <select name="color" class="w-full md:w-auto md:ml-2 rounded p-3 md:p-1 bg-gray-700 text-gray-100 border-none focus:ring-2 focus:ring-blue-400 text-lg md:text-base">
-                <option value="">No grouping</option>
-                {% for col in columns %}
-                  <option value="{{ col }}" {% if col == color %}selected{% endif %}>{{ col }}</option>
-                {% endfor %}
-            </select>
+        <!-- Диапазоны осей -->
+        <div class="pt-4 border-t border-gray-200">
+            <h4 class="text-sm font-semibold text-gray-700 mb-4">📏 Axis Ranges (leave empty for auto)</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- X диапазон -->
+                <div class="space-y-3">
+                    <label class="text-sm text-gray-600 font-medium">X axis range</label>
+                    <div class="flex items-center gap-3">
+                        <input type="number" name="x_min" value="{{ x_min }}" step="any" placeholder="Min" 
+                               class="flex-1 p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400">
+                        <span class="text-gray-500 font-medium">to</span>
+                        <input type="number" name="x_max" value="{{ x_max }}" step="any" placeholder="Max"
+                               class="flex-1 p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400">
+                    </div>
+                </div>
+                
+                <!-- Y диапазон -->
+                <div class="space-y-3">
+                    <label class="text-sm text-gray-600 font-medium">Y axis range</label>
+                    <div class="flex items-center gap-3">
+                        <input type="number" name="y_min" value="{{ y_min }}" step="any" placeholder="Min"
+                               class="flex-1 p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400">
+                        <span class="text-gray-500 font-medium">to</span>
+                        <input type="number" name="y_max" value="{{ y_max }}" step="any" placeholder="Max"
+                               class="flex-1 p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-400 focus:border-blue-400">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Быстрые кнопки -->
+            <div class="flex flex-wrap gap-3 mt-4">
+                <button type="button" onclick="setRange('x', 0, null)" class="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg text-sm hover:bg-blue-200 transition font-medium">
+                    X from 0
+                </button>
+                <button type="button" onclick="setRange('y', 0, null)" class="px-4 py-2 bg-green-100 text-green-700 rounded-lg text-sm hover:bg-green-200 transition font-medium">
+                    Y from 0
+                </button>
+                <button type="button" onclick="clearRanges()" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200 transition font-medium">
+                    Clear all ranges
+                </button>
+            </div>
         </div>
         
-        <button type="submit" class="w-full md:w-auto md:ml-4 px-6 py-3 md:px-4 md:py-2 bg-blue-700 text-white rounded-xl font-bold hover:bg-blue-800 transition text-lg md:text-base">
-            📊 Plot!
-        </button>
+        <!-- Кнопка отправки -->
+        <div class="pt-4 border-t border-gray-200">
+            <button type="submit" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold hover:bg-blue-700 transition text-lg shadow-md">
+                📊 Update Plot!
+            </button>
+        </div>
     </form>
     
-    <!-- Обновленный контейнер для графика -->
-    <div class="w-full max-w-6xl flex justify-center bg-gray-900 p-4 rounded-xl shadow">
+    <!-- Контейнер для графика с белым фоном -->
+    <div class="w-full max-w-6xl flex justify-center bg-white p-6 rounded-xl shadow-lg border border-gray-200">
         <div class="plot-container w-full">
             {{ plot_html | safe }}
         </div>
     </div>
 </div>
 
-<!-- CSS стили для мобильной оптимизации графика -->
+<script>
+function setRange(axis, min, max) {
+    if (axis === 'x') {
+        if (min !== null) document.querySelector('input[name="x_min"]').value = min;
+        if (max !== null) document.querySelector('input[name="x_max"]').value = max;
+    } else if (axis === 'y') {
+        if (min !== null) document.querySelector('input[name="y_min"]').value = min;
+        if (max !== null) document.querySelector('input[name="y_max"]').value = max;
+    }
+}
+
+function clearRanges() {
+    document.querySelector('input[name="x_min"]').value = '';
+    document.querySelector('input[name="x_max"]').value = '';
+    document.querySelector('input[name="y_min"]').value = '';
+    document.querySelector('input[name="y_max"]').value = '';
+}
+</script>
+
 <style>
 .plot-container {
     width: 100%;
-    overflow-x: auto; /* Если график все равно широкий */
+    overflow-x: auto;
 }
 
 .plot-container .plotly-graph-div {
@@ -60,12 +141,10 @@
     height: 400px !important;
 }
 
-/* Скрываем Plotly панель инструментов если появится */
 .modebar {
     display: none !important;
 }
 
-/* Убираем возможность выделения текста в графике */
 .plot-container .plotly-graph-div .plotly {
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -73,11 +152,32 @@
     user-select: none;
 }
 
-/* Мобильная оптимизация */
 @media (max-width: 768px) {
     .plot-container .plotly-graph-div {
         height: 350px !important;
     }
+}
+
+input[type="checkbox"]:checked {
+    background-color: #2563eb;
+    border-color: #2563eb;
+}
+
+input[type="checkbox"]:focus, input[type="number"]:focus, select:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+form {
+    transition: box-shadow 0.3s ease;
+}
+
+form:hover {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+button[type="button"]:hover {
+    transform: translateY(-1px);
 }
 </style>
 {% endblock %}
